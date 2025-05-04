@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>MNIST Digit Recognizer</title>
+    <style>
+        body {
+            background: url("{{ url_for('static', filename='background/number6.jpeg') }}") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            margin: 0;
+        }
+
+        /* Animated headline */
+        h1 {
+            font-size: 3em;
+            font-weight: bold;
+            animation: none;
+            letter-spacing: 2px;
+            color: gold;
+        }
+
+        /* Keyframes for various animations */
+        @keyframes slideIn {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            50% {
+                transform: translateX(20px);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            border: 2px solid gold;
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            background-color: #1a1a1a;
+            margin-top: 30px;
+        }
+
+        img {
+            width: 200px;
+            border: 2px solid gold;
+            margin-bottom: 20px;
+        }
+
+        .result {
+            font-size: 24px;
+            color: gold;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: gold;
+            color: black;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: white;
+            color: black;
+        }
+
+        .restart-button {
+            background-color: red;
+            color: white;
+            margin-top: 20px;
+        }
+
+        /* Apply the animation class dynamically */
+        .slideIn {
+            animation: slideIn 3s ease-out forwards;
+        }
+
+        .scaleIn {
+            animation: scaleIn 2s ease-out forwards;
+        }
+
+        .slideDown {
+            animation: slideDown 2s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="{{ animation_class }}">Handwriting Recognition</h1> <!-- Animated headline -->
+
+    <div class="container">
+        {% if image_path %}
+            <img src="{{ image_path }}" alt="Digit Image">
+        {% endif %}
+        <div class="result">{{ result }}</div>
+
+        {% if image_path %}
+            <form action="{{ url_for('next_image') }}" method="post">
+                <button class="button" type="submit">Next</button>
+            </form>
+        {% endif %}
+
+        {% if done %}
+            <div class="message">
+                <p>Click "Restart" when done.</p>
+            </div>
+            <form action="{{ url_for('restart') }}" method="post">
+                <button class="button restart-button" type="submit">Restart</button>
+            </form>
+        {% endif %}
+
+        <!-- Upload Form -->
+        <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" style="margin-top: 20px;">
+            <input type="file" name="file" accept="image/*" required>
+            <button class="button" type="submit">Upload & Analyze</button>
+        </form>
+    </div>
+</body>
+</html>
